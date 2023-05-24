@@ -8,7 +8,12 @@ const orderSchema = new mongoose.Schema(
         ref: "Products",
       },
     ],
-    payment: {},
+    payment: {
+      type: String,
+      default: "cash on delivery",
+      // enum: ["failed", "success"],
+    
+    },
     buyer: {
       type: mongoose.ObjectId,
       ref: "users",

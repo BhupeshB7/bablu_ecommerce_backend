@@ -181,6 +181,8 @@
 import productModel from "../models/productModel.js";
 import fs from "fs";
 import slugify from "slugify";
+import orderModel from "../models/orderModel.js";
+import userModel from "../models/userModel.js";
 
 export const createProductController = async (req, res) => {
   try {
@@ -487,5 +489,59 @@ export const productCategoryController = async (req, res) => {
       error,
       message: "Error While Getting products",
     });
+  }
+};
+
+
+// Create a new order
+// export const createOrder = async (req, res) => {
+//   try {
+//     const {_id, cart} = req.body;
+
+//     // Get the user details from the database
+//     const user = await userModel.findById(_id);
+
+//     // Get the product details from the database
+//     // const productIds = products.map((product) => product.productId);
+//     // const productList = await productModel.find({ _id: { $in: productIds } });
+
+//     // Create the order
+//     const order = new orderModel({
+//       products: cart,
+//       buyer: user,
+//     });
+
+//     // Save the order in the database
+//     await order.save();
+
+//     res.status(200).json({ message: "Order created successfully" });
+//   } catch (error) {
+//     console.log(error);
+//     res.status(500).json({ message: "Failed to create order" });
+//   }
+// };
+export const createOrder = async (req, res) => {
+  try {
+    const { _id, cart } = req.body;
+
+    // Get the user details from the database
+    const user = await userModel.findById(_id);
+
+    // Get the product details from the database
+    const productIds = cart.map((product) => product.productId);
+    const productList = await productModel.find({ _id: { $in: productIds } });
+
+    // Create the order
+    const order = new orderModel({
+      products: productList,
+      buyer: user,
+    });
+
+    // Save the order in the database
+    await order.save();
+    res.status(200).json({ message: "Order created successfully" });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Failed to create order" });
   }
 };

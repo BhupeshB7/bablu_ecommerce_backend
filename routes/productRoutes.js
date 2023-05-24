@@ -1,5 +1,6 @@
 import express from "express";
 import {
+  createOrder,
   createProductController,
   deleteProductController,
   getProductController,
@@ -61,7 +62,8 @@ router.get("/search/:keyword", searchProductController);
 
 //similar product
 router.get("/related-product/:pid/:cid", realtedProductController);
-
+//orders
+router.post("/cashorders/", createOrder);
 //category wise product
 router.get("/product-category/:slug", productCategoryController);
 export default router;
